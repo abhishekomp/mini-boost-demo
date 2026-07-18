@@ -1,0 +1,17 @@
+server:
+  port: 8080   # greeting-service runs on 8080 (the "front door" service)
+
+spring:
+  application:
+    name: greeting-service
+
+# Where to find name-service.
+# In Phase 1 (local Maven run): name-service is on localhost:8081.
+# In Phase 3+ (Kubernetes): this value is overridden by an environment variable
+#   NAME_SERVICE_URL=http://name-service:8081
+# Spring Boot automatically maps environment variables to properties:
+#   NAME_SERVICE_URL → name.service.url
+name:
+  service:
+    url: http://localhost:8081
+

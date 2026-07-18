@@ -1,0 +1,11 @@
+# Exclude files that Docker does not need in the build context.
+# Without this file, Docker would send everything in the directory to the daemon,
+# including any locally-built target/ folders which can be hundreds of MB.
+
+target/
+*.md
+.git
+.gitignore
+.idea
+*.iml
+

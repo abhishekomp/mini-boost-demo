@@ -1,0 +1,18 @@
+apiVersion: v2
+name: name-service
+description: >
+  Helm chart for name-service — returns a random name.
+  Part of the mini-boost-demo learning project.
+  In the real Boost platform, this maps to any pod chart under boost/charts/.
+
+type: application
+
+# chart version: the version of THIS CHART (the packaging template).
+# When the team changes the Helm templates (e.g. adds a new probe),
+# they bump this version — even if the application code did not change.
+version: 1.0.0
+
+# appVersion: the version of the APPLICATION being deployed.
+# Used for documentation — the actual image tag comes from values.yaml.
+appVersion: "1.0.0"
+

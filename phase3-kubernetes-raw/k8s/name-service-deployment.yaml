@@ -1,0 +1,68 @@
+---
+# Kubernetes Deployment for name-service
+#
+# A Deployment manages a set of Pod replicas.
+# If a Pod crashes, the Deployment controller starts a new one automatically.
+# If you update the image, it performs a rolling update (no downtime).
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: name-service
+  labels:
+    app: name-service
+spec:
+  replicas: 1             # Run exactly 1 copy of this Pod
+
+  # Selector: which Pods does this Deployment manage?
+  # It manages Pods that have the label app=name-service
+  selector:
+    matchLabels:
+      app: name-service
+
+  template:               # This is the Pod template — defines what the Pod looks like
+    metadata:
+      labels:
+        app: name-service # Every Pod created from this template gets this label
+
+    spec:
+      containers:
+        - name: name-service
+          # The image we built in Phase 2 and imported into k3s.
+          # imagePullPolicy: Never tells Kubernetes NOT to try to pull from a remote registry.
+          # It must use the locally imported image.
+          image: name-service:1.0.0
+          imagePullPolicy: Never
+
+          ports:
+            - containerPort: 8081   # The port the application listens on inside the container
+
+          # Health check: Kubernetes probes this endpoint every 10 seconds.
+          # If it fails 3 times in a row, Kubernetes restarts the Pod.
+          # This is why we wrote GET /api/health in Phase 1.
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 8081
+            initialDelaySeconds: 15   # Wait 15s before first probe (app startup time)
+            periodSeconds: 10
+
+          # Readiness check: Kubernetes only sends traffic AFTER this probe succeeds.
+          # Prevents sending requests to a Pod that has not finished starting up.
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 8081
+            initialDelaySeconds: 15
+            periodSeconds: 5
+
+          # Resource limits: cap how much CPU and memory this container can use.
+          # Without limits, one runaway service can starve others on the same node.
+          resources:
+            requests:
+              memory: "128Mi"    # Guaranteed minimum memory
+              cpu: "100m"        # 100 millicores = 0.1 of a CPU core
+            limits:
+              memory: "256Mi"    # Hard cap
+              cpu: "250m"
+

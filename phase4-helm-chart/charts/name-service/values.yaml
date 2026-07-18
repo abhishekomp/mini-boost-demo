@@ -1,0 +1,30 @@
+# Default values for name-service.
+# These are the defaults. They can be overridden at install time with --set or -f values-override.yaml.
+# In the real Boost platform, dev-tools passes overrides like --set image.digest=sha256:...
+
+replicaCount: 1
+
+image:
+  repository: name-service   # Image name (no registry prefix for local import)
+  tag: "1.0.0"
+  pullPolicy: Never           # Never pull from registry — use locally imported image
+
+service:
+  type: ClusterIP   # Internal only. Override to NodePort for the "front door" service.
+  port: 8081        # Port clients use to reach this service
+
+container:
+  port: 8081        # Port the application listens on inside the container
+
+resources:
+  requests:
+    memory: "128Mi"
+    cpu: "100m"
+  limits:
+    memory: "256Mi"
+    cpu: "250m"
+
+health:
+  path: /api/health
+  initialDelaySeconds: 15
+

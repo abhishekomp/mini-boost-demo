@@ -1,0 +1,33 @@
+---
+# Kubernetes Service for name-service
+#
+# A Service gives a stable DNS name and a stable IP (ClusterIP) to a set of Pods.
+# Pods come and go (they restart, get rescheduled, get new IPs).
+# A Service is the stable address that other services can always reach.
+#
+# This Service means any Pod in the cluster can call:
+#   http://name-service:8081/api/name
+# and Kubernetes will route it to one of the Pods matching selector app=name-service.
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: name-service    # This name becomes the DNS hostname inside the cluster!
+  labels:
+    app: name-service
+
+spec:
+  # ClusterIP: the Service is only reachable from inside the cluster.
+  # This is correct for internal services — they should not be exposed to the internet.
+  type: ClusterIP
+
+  # Route traffic to Pods that have this label.
+  # This is how the Service finds the Pods managed by the Deployment above.
+  selector:
+    app: name-service
+
+  ports:
+    - port: 8081          # The port clients use to reach this Service
+      targetPort: 8081    # The port the Pod's container is actually listening on
+      protocol: TCP
+

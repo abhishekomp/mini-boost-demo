@@ -1,0 +1,9 @@
+apiVersion: v2
+name: greeting-service
+description: >
+  Helm chart for greeting-service — calls name-service and returns a greeting.
+  Part of the mini-boost-demo learning project.
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+

@@ -1,0 +1,31 @@
+replicaCount: 1
+
+image:
+  repository: greeting-service
+  tag: "1.0.0"
+  pullPolicy: Never
+
+service:
+  type: NodePort    # Exposed outside the cluster — the "front door"
+  port: 8080
+  nodePort: 30080   # Fixed port on your Mac/Colima node
+
+container:
+  port: 8080
+
+# The URL greeting-service uses to call name-service.
+# Inside a Kubernetes cluster, "name-service" resolves via cluster DNS.
+nameServiceUrl: "http://name-service:8081"
+
+resources:
+  requests:
+    memory: "128Mi"
+    cpu: "100m"
+  limits:
+    memory: "256Mi"
+    cpu: "250m"
+
+health:
+  path: /api/health
+  initialDelaySeconds: 15
+

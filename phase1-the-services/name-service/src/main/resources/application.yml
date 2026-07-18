@@ -1,0 +1,7 @@
+server:
+  port: 8081   # name-service runs on 8081 so it does not clash with greeting-service on 8080
+
+spring:
+  application:
+    name: name-service
+

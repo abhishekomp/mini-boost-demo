@@ -1,0 +1,61 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: greeting-service
+  labels:
+    app: greeting-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: greeting-service
+  template:
+    metadata:
+      labels:
+        app: greeting-service
+    spec:
+      containers:
+        - name: greeting-service
+          image: greeting-service:1.0.0
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+
+          # KEY MOMENT: This environment variable overrides application.yml.
+          #
+          # In Phase 1, application.yml said: name.service.url=http://localhost:8081
+          # That worked on your Mac because both services ran locally.
+          #
+          # Inside this Pod, "localhost" would mean the Pod itself — not name-service.
+          # We need to point to the name-service Kubernetes Service, by its DNS name.
+          #
+          # Spring Boot maps env var NAME_SERVICE_URL → property name.service.url
+          # So setting this env var overrides the application.yml value.
+          # The application code (GreetingController.java) did NOT change at all.
+          env:
+            - name: NAME_SERVICE_URL
+              value: "http://name-service:8081"   # "name-service" = the Kubernetes Service name above
+
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 10
+
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 5
+
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "250m"
+
