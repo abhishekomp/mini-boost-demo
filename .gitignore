@@ -1,0 +1,75 @@
+# ========================
+# Maven
+# ========================
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+*.jar
+*.war
+*.ear
+*.class
+
+# ========================
+# Spring Boot
+# ========================
+spring-shell.log
+*.log
+logs/
+
+# ========================
+# IntelliJ IDEA
+# ========================
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+.idea_modules/
+
+# ========================
+# VS Code
+# ========================
+.vscode/
+
+# ========================
+# macOS
+# ========================
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# ========================
+# Docker
+# ========================
+.dockerignore
+
+# ========================
+# Helm
+# ========================
+charts/*.tgz
+*.tgz
+
+# ========================
+# Kubernetes
+# ========================
+kubeconfig
+*.kubeconfig
+
+# ========================
+# Environment / Secrets
+# ========================
+.env
+.env.*
+*.pem
+*.key
+secrets/
+
+# ========================
+# Misc
+# ========================
+*.swp
+*.swo
+*~
+
